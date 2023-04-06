@@ -175,6 +175,7 @@ run: | prepare model delete-pool
 	cd $(build_dir)/deploy && mv $(CR) ./templates; \
 	helm template -f values.yaml --set name=$(NAME) $(RUNFLAG) $(NAME) . > run.yaml && \
 	kubectl delete -f run.yaml >/dev/null 2>&1 || true && \
+	kubectl apply -f $(SECRETS) >/dev/null || true && \
 	kubectl apply -f run.yaml >/dev/null || (echo "unable to run $(NAME), check $(CR)"; exit 1) && \
 	(kubectl exec `kubectl get pod --field-selector status.phase=Running -l app=lake -oname` \
     -- bash -c "zed create $(NAME)") >/dev/null && echo $(NAME) || echo "unable to create pool $(NAME); is lake running?"
@@ -270,7 +271,7 @@ stop-syncer:
 # message/emqx
 .PHONY: start-emqx stop-emqx
 start-emqx:
-	WORKDIR=$(DIGIHOME) digi run message/emqx emqx
+	WORKDIR=$(DIGIHOME) digi run message/emqx emqx -s $(DIGIHOME)/secrets/emqx-dash-auth.yaml
 stop-emqx:
 	digi stop emqx
 
