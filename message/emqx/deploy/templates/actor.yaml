@@ -79,7 +79,7 @@ metadata:
   name: {{ .Values.name }}
   labels:
     name: {{ .Values.name }}
-    app: emqx
+    digi.dev/type: kernel
 spec:
   type: NodePort # exposes nodePort to external network; must be in range 30000-32767
   ports: # emqx

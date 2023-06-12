@@ -25,7 +25,7 @@ For more information about Kubernetes secret files, view the documentation [here
 
 In order to use your secret, edit your `actor.yaml` file.
 
-One of the ways you can utilize your secret is by adding it as an environment variable to your digi. Under your `env` group, you can specify that an enviornment variable should be pulled from a secret as such:
+- One of the ways you can utilize your secret is by adding it as an environment variable to your digi. Under your `env` group, you can specify that an enviornment variable should be pulled from a secret as such:
 
 ```yaml
 env:
