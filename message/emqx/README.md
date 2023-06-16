@@ -6,13 +6,13 @@ In order to run the EMQX digi space, use `digi space start emqx`.
 By default, this EMQX digi will allow all connections without username/password authentication. If you would like to require username/password authentication in order to connect to the broker, you can follow these steps:
 
 ### Set EMQX Web Dashboard Admin Account
-In your digi home directory (normally `~/.digi`), you should find a `secrets` subdirectory. Create file `emqx-dash-auth.yaml` with the following contents:
+In your digi home directory (normally `~/.digi`), you should find a `secrets` subdirectory. Create file `emqx.yaml` with the following contents:
 
 ```yaml
 apiVersion: v1
 kind: Secret
 metadata:
-  name: emqx-dash-auth
+  name: {{ .Values.name }}
 type: Opaque
 stringData:
   username: "username"

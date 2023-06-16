@@ -52,13 +52,13 @@ spec:
           - name: EMQX_DASH_USERNAME
             valueFrom:
               secretKeyRef:
-                name: emqx-dash-auth
+                name: emqx
                 key: username
                 optional: true
           - name: EMQX_DASH_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: emqx-dash-auth
+                name: emqx
                 key: password
                 optional: true
           ports: # https://www.emqx.io/docs/en/v3.0/guide.html#start-emq-x-broker

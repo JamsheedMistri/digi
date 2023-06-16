@@ -30,6 +30,7 @@ var (
 		"syncer":  true,
 		"mounter": true,
 		"emqx":    true,
+		"emqx-auth":    true,
 		"net":     true,
 		"sourcer": true,
 		"pipelet": true,

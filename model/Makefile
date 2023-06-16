@@ -108,6 +108,7 @@ prepare-deploy:
 	rsync -r $(driver_dir)/deploy $(build_dir) || true
 	# app specific configs overwrite the generic ones
 	rsync -r $(digi_config) $(build_dir)/deploy || true
+	rsync $(SECRETS) $(build_dir)/deploy/templates || true
 prepare: | prepare-build-dir prepare-build prepare-deploy
 
 .PHONY: build clear-manifest
@@ -175,7 +176,6 @@ run: | prepare model delete-pool
 	cd $(build_dir)/deploy && mv $(CR) ./templates; \
 	helm template -f values.yaml --set name=$(NAME) $(RUNFLAG) $(NAME) . > run.yaml && \
 	kubectl delete -f run.yaml >/dev/null 2>&1 || true && \
-	kubectl apply -f $(SECRETS) >/dev/null || true && \
 	kubectl apply -f run.yaml >/dev/null || (echo "unable to run $(NAME), check $(CR)"; exit 1) && \
 	(kubectl exec `kubectl get pod --field-selector status.phase=Running -l app=lake -oname` \
     -- bash -c "zed create $(NAME)") >/dev/null && echo $(NAME) || echo "unable to create pool $(NAME); is lake running?"
@@ -191,6 +191,7 @@ stop: | delete-pool
 	((kubectl delete $(PLURAL) $(NAME) >/dev/null || \
 	kubectl delete $(PLURAL).$(VERSION).$(GROUP) $(NAME)) >/dev/null || true) & \
 	kubectl delete deployment $(NAME) >/dev/null && \
+	kubectl delete secret $(NAME) >/dev/null && \
 	echo $(NAME) || echo "$(NAME) isn't running"
 run-no-pool: | prepare model
 	cd $(build_dir)/deploy && mv $(CR) ./templates; \
@@ -269,10 +270,14 @@ stop-syncer:
 # TBD global mounter
 
 # message/emqx
-.PHONY: start-emqx stop-emqx
+.PHONY: start-emqx start-emqx-auth stop-emqx stop-emqx-auth
 start-emqx:
-	WORKDIR=$(DIGIHOME) digi run message/emqx emqx -s $(DIGIHOME)/secrets/emqx-dash-auth.yaml
+	WORKDIR=$(DIGIHOME) digi run message/emqx emqx
+start-emqx-auth:
+	WORKDIR=$(DIGIHOME) digi run message/emqx emqx -s $(DIGIHOME)/secrets/emqx.yaml
 stop-emqx:
+	digi stop emqx
+stop-emqx-auth:
 	digi stop emqx
 
 # net/headscale
