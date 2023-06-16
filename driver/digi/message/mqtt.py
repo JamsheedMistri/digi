@@ -43,7 +43,7 @@ def subscribe(client: mqtt_client):
 
     digi.logger.info(f"Listening for messages on topic {digi.name}")
 
-def start_listening(username, password):
+def start_listening(username="admin", password="digi_password"):
     client = connect_mqtt(username, password)
     subscribe(client)
     client.loop_forever()

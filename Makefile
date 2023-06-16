@@ -33,8 +33,9 @@ ctx:
 	cd sidecar/ctx/cmd/ctx; go install .
 install: | digi neat ctx
 	@mkdir $(HOMEDIR) >/dev/null 2>&1 || true
-	@mkdir $(HOMEDIR)/headscale >/dev/null 2>&1 || true
-	@mkdir $(HOMEDIR)/emqx >/dev/null 2>&1 || true
+	@mkdir $(HOMEDIR)/pv >/dev/null 2>&1 || true
+	@mkdir $(HOMEDIR)/pv/headscale >/dev/null 2>&1 || true
+	@mkdir $(HOMEDIR)/pv/emqx >/dev/null 2>&1 || true
 	@mkdir $(HOMEDIR)/secrets >/dev/null 2>&1 || true
 	@rm $(HOMEDIR)/lake $(HOMEDIR)/space $(HOMEDIR)/message $(HOMEDIR)/net $(HOMEDIR)/sidecar >/dev/null 2>&1 || true
 	@touch $(HOMEDIR)/config $(HOMEDIR)/alias
