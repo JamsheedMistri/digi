@@ -270,14 +270,14 @@ stop-syncer:
 # TBD global mounter
 
 # message/emqx
-.PHONY: start-emqx start-emqx-auth stop-emqx stop-emqx-auth
+.PHONY: start-emqx stop-emqx
 start-emqx:
-	WORKDIR=$(DIGIHOME) digi run message/emqx emqx
-start-emqx-auth:
-	WORKDIR=$(DIGIHOME) digi run message/emqx emqx -s $(DIGIHOME)/secrets/emqx.yaml
+ifeq ($(SECRETS),)
+	@WORKDIR=$(DIGIHOME) digi run message/emqx emqx
+else
+	@WORKDIR=$(DIGIHOME) digi run message/emqx emqx -s $(SECRETS)
+endif
 stop-emqx:
-	digi stop emqx
-stop-emqx-auth:
 	digi stop emqx
 
 # net/headscale
